@@ -7,12 +7,18 @@ build_debug() {
   echo ">>> Building app (Debug mode)"
   $CXX \
     -g \
+    -Wall -std=c++11 \
     -lGL -ldl \
     -I src/ -I dependencies/include/imgui -I dependencies/include/imgui/backends \
     dependencies/include/imgui/backends/imgui_impl_sdl.cpp dependencies/include/imgui/backends/imgui_impl_opengl3.cpp dependencies/include/imgui/imgui*.cpp \
     `sdl2-config --cflags --libs`  \
     src/*.cpp \
+    -MJ temp.json \
     -o build/output/linux/debug/e4
+
+  echo ">>> Generating compile_commands.json"
+  sed -e '1s/^/[\n/' -e '$s/,$/\n]/' temp.json > compile_commands.json
+  rm temp.json
 }
 
 build_release() {
@@ -21,11 +27,13 @@ build_release() {
 
   echo ">>> Building app (Release mode)"
   $CXX \
+    -Wall -std=c++11 \
     -lGL -ldl \
     -I src/ -I dependencies/include/imgui -I dependencies/include/imgui/backends \
     dependencies/include/imgui/backends/imgui_impl_sdl.cpp dependencies/include/imgui/backends/imgui_impl_opengl3.cpp dependencies/include/imgui/imgui*.cpp \
     `sdl2-config --cflags --libs`  \
     src/*.cpp \
+    -MJ compile_commands.json \
     -o build/output/linux/release/e4
 }
 

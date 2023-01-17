@@ -3,7 +3,7 @@ Implementation of e4_spec
 
 # Prerequisites
 - git
-- gcc(clang)
+- clang
 - SDL2-devel
 
 # Build/Run/Clean

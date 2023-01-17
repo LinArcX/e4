@@ -1,5 +1,8 @@
 *.*user
+.cache/*
 imgui.ini
+compile_commands.json
+
 /garbage
 /build/output
 /build/tools/ide/visualStudio/.vs
