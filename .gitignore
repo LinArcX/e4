@@ -1,2 +1,11 @@
-build/*
+*.*user
 imgui.ini
+/garbage
+/build/output
+/build/tools/ide/visualStudio/.vs
+/build/tools/ide/visualStudio/x64
+/build/tools/ide/visualStudio/Debug
+/build/tools/ide/visualStudio/Release
+/build/tools/ide/visualStudio/*.hlsl
+/build/tools/ide/visualStudio/*.hlsl
+/build/tools/ide/visualStudio/image.bmp
