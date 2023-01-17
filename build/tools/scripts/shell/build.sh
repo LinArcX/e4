@@ -1,7 +1,7 @@
 #!/bin/sh
 
 build_debug() {
-  echo ">>> Creating build directory"
+  echo ">>> Creating 'build/output/linux/debug' directory"
   mkdir -p build/output/linux/debug
 
   echo ">>> Building app (Debug mode)"
@@ -22,7 +22,7 @@ build_debug() {
 }
 
 build_release() {
-  echo ">>> Creating build directory"
+  echo ">>> Creating 'build/output/linux/release' directory"
   mkdir -p build/output/linux/release
 
   echo ">>> Building app (Release mode)"
@@ -35,6 +35,10 @@ build_release() {
     src/*.cpp \
     -MJ compile_commands.json \
     -o build/output/linux/release/e4
+
+  echo ">>> Generating compile_commands.json"
+  sed -e '1s/^/[\n/' -e '$s/,$/\n]/' temp.json > compile_commands.json
+  rm temp.json
 }
 
 clean() {
