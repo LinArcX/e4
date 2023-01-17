@@ -21,10 +21,13 @@ class Application
     void CreateWindow();
 
     void SetupImgui();
-    void LoadFonts();
+    void LoadFonts(ImGuiIO& io);
 
     void HandleEvents();
+
     void Draw();
+    void ShowMainPanel();
+
     void RenderScene();
 
   public:
@@ -42,6 +45,8 @@ class Application
 
     bool appIsRunning = false;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+    bool panelHasCloseButton = true;
 };
 
 #endif

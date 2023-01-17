@@ -4,8 +4,8 @@ int main(int, char**)
 {
   Application app;
 
-  if(int retValue = app.Initialize() < 0)
-    return retValue;
+  if(int initResult = app.Initialize() < 0)
+    return initResult;
   app.Loop();
   app.CleanUp();
 

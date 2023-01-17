@@ -31,7 +31,7 @@ build_release()
   $CXX \
     -Wall -std=c++11 \
     -lGL -ldl \
-    -I src/ -I src/ui -I dependencies/include/imgui -I dependencies/include/imgui/backends \
+    -I src/ -I src/ui -I src/fonts -I dependencies/include/imgui -I dependencies/include/imgui/backends \
     dependencies/include/imgui/backends/imgui_impl_sdl.cpp dependencies/include/imgui/backends/imgui_impl_opengl3.cpp dependencies/include/imgui/imgui*.cpp \
     `sdl2-config --cflags --libs`  \
     src/*.cpp src/ui/*.cpp \

@@ -7,7 +7,7 @@ Implementation of e4_spec
 - SDL2-devel
 
 # Build/Run/Clean
-## Linue
+## Linux
 ```
 chmod +x ./build/tools/scripts/shell/build.sh
 source ./build/tools/scripts/shell/build.sh
