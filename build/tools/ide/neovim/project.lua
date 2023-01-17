@@ -162,17 +162,17 @@ end
 function project.build()
   notif_done = "Build"
   notif_in_progress = "Building..."
-  vim.cmd(string.format(":call HTerminal(0.4, 200, \"source build/tools/scripts/shell/build.sh; build_debug\")"))
+  vim.cmd(string.format(":call HTerminal(0.4, 200, \"source build/tools/scripts/shell/build.sh; build_release\")"))
 end
 
 function project.run()
-  vim.cmd(string.format(":call HTerminal(0.4, 200, \"source build/tools/scripts/shell/build.sh; run_debug\")"))
+  vim.cmd(string.format(":silent; lua require('project').async_task(\"%s\")", string.format("source build/tools/scripts/shell/build.sh; run_release")))
 end
 
 function project.clean()
   notif_done = "Clean"
   notif_in_progress = "Cleaning..."
-  vim.cmd(string.format(":silent; lua require('project').async_task(\"%s\")", string.format("source build/tools/scripts/shell/build.sh; clean ")))
+  vim.cmd(string.format(":silent; lua require('project').async_task(\"%s\")", string.format("source build/tools/scripts/shell/build.sh; clean")))
 end
 
 items = require("user.util.file").read_file_and_return_lines_as_table(project_file);

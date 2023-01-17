@@ -1,6 +1,7 @@
 #!/bin/sh
 
-build_debug() {
+build_debug()
+{
   echo ">>> Creating 'build/output/linux/debug' directory"
   mkdir -p build/output/linux/debug
 
@@ -21,7 +22,8 @@ build_debug() {
   rm temp.json
 }
 
-build_release() {
+build_release()
+{
   echo ">>> Creating 'build/output/linux/release' directory"
   mkdir -p build/output/linux/release
 
@@ -29,11 +31,11 @@ build_release() {
   $CXX \
     -Wall -std=c++11 \
     -lGL -ldl \
-    -I src/ -I dependencies/include/imgui -I dependencies/include/imgui/backends \
+    -I src/ -I src/ui -I dependencies/include/imgui -I dependencies/include/imgui/backends \
     dependencies/include/imgui/backends/imgui_impl_sdl.cpp dependencies/include/imgui/backends/imgui_impl_opengl3.cpp dependencies/include/imgui/imgui*.cpp \
     `sdl2-config --cflags --libs`  \
-    src/*.cpp \
-    -MJ compile_commands.json \
+    src/*.cpp src/ui/*.cpp \
+    -MJ temp.json \
     -o build/output/linux/release/e4
 
   echo ">>> Generating compile_commands.json"
