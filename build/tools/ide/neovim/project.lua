@@ -9,7 +9,7 @@ local event = require("nui.utils.autocmd").event
 local items
 local has_error = false
 
-local app_name = "image_resizer"
+local app_name = "e4"
 local project_file = "build/tools/ide/neovim/project.txt"
 
 local debug="debug"
@@ -159,22 +159,6 @@ function project.async_task(command)
     })
 end
 
-function project.build()
-  notif_done = "Build"
-  notif_in_progress = "Building..."
-  vim.cmd(string.format(":call HTerminal(0.4, 200, \"source build/tools/scripts/shell/build.sh; build_release\")"))
-end
-
-function project.run()
-  vim.cmd(string.format(":silent; lua require('project').async_task(\"%s\")", string.format("source build/tools/scripts/shell/build.sh; run_release")))
-end
-
-function project.clean()
-  notif_done = "Clean"
-  notif_in_progress = "Cleaning..."
-  vim.cmd(string.format(":silent; lua require('project').async_task(\"%s\")", string.format("source build/tools/scripts/shell/build.sh; clean")))
-end
-
 items = require("user.util.file").read_file_and_return_lines_as_table(project_file);
 if items[2] == debug then
   vim.api.nvim_set_keymap('n', '<F5>', ':lua require\'dap\'.continue()<CR>', {noremap = true})
@@ -203,5 +187,41 @@ table.insert(require('command_palette').CpMenu,
     { 'run (F5)', ":lua require('project').run()" },
     { 'build (C-b)', ":lua require('project').build()" },
   })
+
+function project.build()
+  notif_done = "Build"
+  notif_in_progress = "Building..."
+
+  items = require("user.util.file").read_file_and_return_lines_as_table(project_file);
+  if items[2] == debug then
+    vim.cmd(string.format(":call HTerminal(0.4, 200, \"./build/tools/scripts/shell/build.sh build_debug\")"))
+  else
+    vim.cmd(string.format(":call HTerminal(0.4, 200, \"./build/tools/scripts/shell/build.sh build_release\")"))
+  end
+end
+
+function project.run()
+  notif_done = "Run"
+  notif_in_progress = "Running..."
+
+  items = require("user.util.file").read_file_and_return_lines_as_table(project_file);
+  if items[2] == debug then
+    vim.cmd(string.format(":silent; lua require('project').async_task(\"%s\")", string.format("./build/tools/scripts/shell/build.sh run_debug")))
+  else
+    vim.cmd(string.format(":silent; lua require('project').async_task(\"%s\")", string.format("./build/tools/scripts/shell/build.sh run_release")))
+  end
+end
+
+function project.clean()
+  notif_done = "Clean"
+  notif_in_progress = "Cleaning..."
+
+  items = require("user.util.file").read_file_and_return_lines_as_table(project_file);
+  if items[2] == debug then
+    vim.cmd(string.format(":silent; lua require('project').async_task(\"%s\")", string.format("./build/tools/scripts/shell/build.sh clean_debug")))
+  else
+    vim.cmd(string.format(":silent; lua require('project').async_task(\"%s\")", string.format("./build/tools/scripts/shell/build.sh clean_release")))
+  end
+end
 
 return project

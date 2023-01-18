@@ -7,8 +7,10 @@
 
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
-#include "fonts/RobotoRegular.h"
 #include <stdio.h>
+
+#include "fonts/RobotoRegular.h"
+#include "fonts/UbuntuMedium.h"
 
 Application::Application()
 {}
@@ -96,11 +98,12 @@ void Application::LoadFonts(ImGuiIO& io)
   // - Use '#define IMGUI_ENABLE_FREETYPE' in your imconfig file to use Freetype for higher quality font rendering.
   // - Read 'docs/FONTS.md' for more instructions and details.
   // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-  ImFontConfig fontConfig;
-	fontConfig.FontDataOwnedByAtlas = false;
-	ImFont* robotoRegularFont = io.Fonts->AddFontFromMemoryTTF((void*)g_RobotoRegular, sizeof(g_RobotoRegular), 20.0f, &fontConfig);
-	io.FontDefault = robotoRegularFont;
 
+  ImFontConfig fontConfig;
+	//fontConfig.FontDataOwnedByAtlas = false;
+	ImFont* font = io.Fonts->AddFontFromMemoryTTF((void*)g_RobotoRegular, sizeof(g_RobotoRegular), 20.0f, &fontConfig);
+	//ImFont* font = io.Fonts->AddFontFromMemoryTTF((void*)UbuntuMedium_compressed_data, UbuntuMedium_compressed_size, 16.0f, &fontConfig);
+	io.FontDefault = font;
 }
 
 void Application::HandleEvents()
