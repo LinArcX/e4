@@ -9,8 +9,15 @@
 #include "imgui_impl_opengl3.h"
 #include <stdio.h>
 
-#include "fonts/RobotoRegular.h"
+#include "fonts/InconsolateMedium.h"
 #include "fonts/UbuntuMedium.h"
+#include "fonts/FiraSansMedium.h"
+
+#include "fonts/MerriWeatherRegular.h"
+#include "fonts/SofiaSansRegular.h"
+#include "fonts/SofiaSansSemiCondensedRegular.h"
+#include "fonts/AlegreyaMedium.h"
+
 
 Application::Application()
 {}
@@ -92,17 +99,11 @@ void Application::SetupImgui()
 
 void Application::LoadFonts(ImGuiIO& io)
 {
-  // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
-  // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-  // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-  // - Use '#define IMGUI_ENABLE_FREETYPE' in your imconfig file to use Freetype for higher quality font rendering.
-  // - Read 'docs/FONTS.md' for more instructions and details.
-  // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-
   ImFontConfig fontConfig;
-	//fontConfig.FontDataOwnedByAtlas = false;
-	ImFont* font = io.Fonts->AddFontFromMemoryTTF((void*)g_RobotoRegular, sizeof(g_RobotoRegular), 20.0f, &fontConfig);
-	//ImFont* font = io.Fonts->AddFontFromMemoryTTF((void*)UbuntuMedium_compressed_data, UbuntuMedium_compressed_size, 16.0f, &fontConfig);
+
+  static const ImWchar ranges[] = { 0x0020, 0x00FF, 0x0100, 0x017F, 0 };
+  ImFont* font = io.Fonts->AddFontFromMemoryCompressedTTF(InconsolateMedium_compressed_data, InconsolateMedium_compressed_size, 16.0f, NULL, ranges);
+
 	io.FontDefault = font;
 }
 
