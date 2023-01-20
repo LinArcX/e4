@@ -1,6 +1,8 @@
 *.*user
 .cache/*
 imgui.ini
+temp.txt
+compile_commands.txt
 compile_commands.json
 
 /garbage
