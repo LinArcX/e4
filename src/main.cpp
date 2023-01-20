@@ -3,6 +3,7 @@
 int main(int, char**)
 {
   Application app;
+  app.Initialize();
 
   if(int initResult = app.Initialize() < 0)
     return initResult;

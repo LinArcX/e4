@@ -25,7 +25,7 @@ let general_compiler_flags = ($general_compiler_flags_list | str join ' ')
 
 #########################
 let clang_flags_list = [
-  "-MJ temp.json"
+  "-MJ temp.txt"
 ]
 let clang_flags = ($clang_flags_list | str join ' ')
 
@@ -83,5 +83,6 @@ let full_command = ($compiler
 nu -c $full_command
 
 echo ">>> Generating compile_commands.json"
-#sed -e '1s/^/[\n/' -e '$s/,$/\n]/' temp.json > compile_commands.json
-rm temp.json
+open temp.txt | str trim | $"[\n($in)\n]" | save compile_commands.txt
+mv compile_commands.txt compile_commands.json
+rm temp.txt
