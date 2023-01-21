@@ -10,7 +10,7 @@ local items
 local has_error = false
 
 local app_name = "e4"
-local project_file = "build/tools/ide/neovim/project.txt"
+local project_file = "build/tools/cross_platform/neovim/project.txt"
 
 local debug="debug"
 local release="release"
@@ -194,9 +194,9 @@ function project.build()
 
   items = require("user.util.file").read_file_and_return_lines_as_table(project_file);
   if items[2] == debug then
-    vim.cmd(string.format(":call HTerminal(0.4, 200, \"./build/tools/scripts/shell/build.sh build_debug\")"))
+    vim.cmd(string.format(":call HTerminal(0.4, 200, \"nu build/tools/linux/nu/build.nu debug\")"))
   else
-    vim.cmd(string.format(":call HTerminal(0.4, 200, \"./build/tools/scripts/shell/build.sh build_release\")"))
+    vim.cmd(string.format(":call HTerminal(0.4, 200, \"nu build/tools/linux/nu/build.nu release\")"))
   end
 end
 
@@ -206,9 +206,9 @@ function project.run()
 
   items = require("user.util.file").read_file_and_return_lines_as_table(project_file);
   if items[2] == debug then
-    vim.cmd(string.format(":silent; lua require('project').async_task(\"%s\")", string.format("./build/tools/scripts/shell/build.sh run_debug")))
+    vim.cmd(string.format(":silent; lua require('project').async_task(\"%s\")", string.format("nu build/tools/linux/nu/run.nu debug")))
   else
-    vim.cmd(string.format(":silent; lua require('project').async_task(\"%s\")", string.format("./build/tools/scripts/shell/build.sh run_release")))
+    vim.cmd(string.format(":silent; lua require('project').async_task(\"%s\")", string.format("nu build/tools/linux/nu/run.nu release")))
   end
 end
 
@@ -218,9 +218,9 @@ function project.clean()
 
   items = require("user.util.file").read_file_and_return_lines_as_table(project_file);
   if items[2] == debug then
-    vim.cmd(string.format(":silent; lua require('project').async_task(\"%s\")", string.format("./build/tools/scripts/shell/build.sh clean_debug")))
+    vim.cmd(string.format(":silent; lua require('project').async_task(\"%s\")", string.format("nu build/tools/linux/nu/clean.nu debug")))
   else
-    vim.cmd(string.format(":silent; lua require('project').async_task(\"%s\")", string.format("./build/tools/scripts/shell/build.sh clean_release")))
+    vim.cmd(string.format(":silent; lua require('project').async_task(\"%s\")", string.format("nu build/tools/linux/nu/clean.nu release")))
   end
 end
 

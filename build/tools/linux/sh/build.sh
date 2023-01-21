@@ -1,7 +1,5 @@
 #!/bin/sh
 
-#clang++ -lGL -ldl -Wall -std=c++11 `sdl2-config --cflags --libs` dependencies/include/imgui/backends/imgui_impl_sdl.cpp dependencies/include/imgui/backends/imgui_impl_opengl3.cpp dependencies/include/imgui/imgui*.cpp  -o build/output/linux/debug/e4 -I src/ -I src/ui -I src/fonts -I dependencies/include/imgui -I dependencies/include/imgui/backends src/*.cpp src/ui/*.cpp
-
 build_debug()
 {
   echo ">>> Creating 'build/output/linux/debug' directory"
