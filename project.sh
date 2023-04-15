@@ -1,4 +1,9 @@
 #!/usr/bin/bash
+#
+# search/replace --> ambr <source_text> <dest_text>
+# search file names --> ctrl-t | ff <file-name> | fzf | fd
+# search text inside files --> ft <text> | rg <text> |
+#
 #c++  -I .. -I ../.. -I ../../backends main.cpp ../../backends/imgui_impl_sdl.cpp ../../backends/imgui_impl_opengl3.cpp ../../imgui*.cpp `sdl2-config --libs` -lGL -ldl
 
 p() {
@@ -26,6 +31,10 @@ p() {
     "build(debug)")
       echo ">>> Creating 'build/output/linux/debug' directory"
       mkdir -p "build/output/linux/debug"
+
+      echo ">>> generating tags"
+      ctags --c++-kinds=+p --fields=+iaS --extras=+q -R *
+
       echo ">>> Building app - (debug) mode"
       $compiler $general_compiler_flags $debug_only_flags $loader_flags $sdl_include_dir $sdl_include_libs_dir $imgui_dependencies $include_dirs $source_dirs $output_debug
       ;;
@@ -39,6 +48,10 @@ p() {
     "build(release)")
       echo ">>> Creating 'build/output/linux/release' directory"
       mkdir -p "build/output/linux/release"
+
+      echo ">>> generating tags"
+      ctags --c++-kinds=+p --fields=+iaS --extras=+q -R *
+
       echo ">>> Building app - (release) mode"
       $compiler $general_compiler_flags $loader_flags $sdl_include_dir $sdl_include_libs_dir $imgui_dependencies $include_dirs $source_dirs $output_release
       ;;
@@ -52,7 +65,7 @@ p() {
       echo ">>> Cleaning 'build/output/linux/release' directory"
       rm -r "build/output/linux/release" ;;
     "generate tags")
-      ctags -R *;;
+      ctags --c++-kinds=+p --fields=+iaS --extras=+q -R *;;
     *) ;;
   esac
 }
