@@ -17,6 +17,19 @@
 # find docs of c standard librariy: install man-pages-devel and man <method>
 #
 # debugging: gdb build/output/linux/debug/e4
+#   set breakpoint: b 1
+#   start debugging: start
+#   from this phase, for faster moving between files and methods, you can switch to single-key-mode: C-x s. and here are the commands in this mode:
+#     q - quit, exit SingleKey mode.
+#     c - continue
+#     d - down
+#     f - finish
+#     n - next
+#     r - run
+#     s - step
+#     u - up
+#     v - info locals
+#     w - where
 
 p() {
   # raw command for building:
@@ -57,7 +70,7 @@ p() {
       ;;
     "debug")
       echo ">>> Debugging e4"
-      gdb build/output/linux/debug/e4
+      gdb --tui build/output/linux/debug/e4
       ;;
     "run(debug)")
       echo ">>> Running e4(debug mode)"
