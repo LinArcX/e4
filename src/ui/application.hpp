@@ -30,6 +30,12 @@ class Application
 
     void RenderScene();
 
+    void ShowMenuBar();
+    void ShowRandomText();
+    void AboutApp(bool* p_open);
+    void QuitApp();
+    void OpenFileDialog();
+
   public:
     void Loop();
     void CleanUp();
@@ -43,10 +49,12 @@ class Application
     int viewPortX;
     int viewPortY;
 
-    bool appIsRunning = false;
+    bool appIsRunning = true;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
     bool panelHasCloseButton = true;
+
+    static bool about_app;
 };
 
 #endif

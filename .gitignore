@@ -4,6 +4,7 @@ imgui.ini
 temp.txt
 compile_commands.txt
 compile_commands.json
+tags
 
 /garbage
 /build/output

@@ -10,7 +10,7 @@ build_debug()
     -g \
     -lGL \
     -ldl \
-    -Wall -std=c++11 \
+    -Wall -std=c++14 \
     `sdl2-config --cflags --libs`  \
     dependencies/include/imgui/backends/imgui_impl_sdl.cpp dependencies/include/imgui/backends/imgui_impl_opengl3.cpp dependencies/include/imgui/imgui*.cpp \
     -MJ temp.json \
@@ -35,7 +35,7 @@ build_release()
 
   echo ">>> Building app (Release mode)"
   $CXX \
-    -Wall -std=c++11 \
+    -Wall -std=c++14 \
     -lGL -ldl \
     -I src/ \
     -I src/ui \
