@@ -4,6 +4,13 @@
 # there's a project.sh in roof of the project. before doing anything, source it: . project.sh
 #
 # tools:
+# static code analyzer:
+#   - c: splint
+#   - c++: cppcheck
+# memory debugger: valgrind
+# system call tracer: strace
+# display info about .obj files: objdump
+#
 # opening/editing files: noevim
 #   folding/unfolding: z Shift+m, z Shift+r
 #   switch between source/header: F1
@@ -16,7 +23,7 @@
 # find string/text in whole project: ft <text> | rg <text>
 # find docs of c standard librariy: install man-pages-devel and man <method>
 #
-# debugging: gdb build/output/linux/debug/e4
+# debugging: gdb build/output/linux/debug/$app
 #   set breakpoint: b 1
 #   start debugging: start
 #   from this phase, for faster moving between files and methods, you can switch to single-key-mode: C-x s. and here are the commands in this mode:
@@ -31,11 +38,16 @@
 #     v - info locals
 #     w - where
 
+app="e4"
+mode="debug"
+build_dir="build/output/linux"
+
 p() {
   # raw command for building:
   # c++  -I .. -I ../.. -I ../../backends main.cpp ../../backends/imgui_impl_sdl.cpp ../../backends/imgui_impl_opengl3.cpp ../../imgui*.cpp `sdl2-config --libs` -lGL -ldl
 
   compiler="clang++"
+  mode_flags=""
 
   src="src/*.c"
   source_dirs="src/*.cpp src/ui/*.cpp dependencies/include/imgui/ImGuiFileDialog.cpp"
@@ -43,61 +55,60 @@ p() {
   imgui_dependencies="dependencies/include/imgui/backends/imgui_impl_sdl.cpp dependencies/include/imgui/backends/imgui_impl_opengl3.cpp dependencies/include/imgui/imgui*.cpp"
   include_dirs="-I src/ -I src/ui -I src/fonts -I dependencies/include/imgui -I dependencies/include/imgui/backends"
 
-  general_flags="-Wall -std=c++17"
-  debug_only_flags="-g -O0"
-  release_only_flags="-O3"
+  general_compiler_flags="-Wall -std=c++17"
 
   loader_flags="-lGL -ldl"
   sdl_include_dir="`sdl2-config --cflags`"
   sdl_include_libs_dir="`sdl2-config --libs`"
 
-  output_debug="-o build/output/linux/debug/e4"
-  output_release="-o build/output/linux/release/e4"
+  output="-o $build_dir/$mode/$app"
 
-  commands=("build(debug)" "debug" "run(debug)" "clean(debug)" "build(release)" "run(release)" "clean(release)" "generate tags")
+  commands=("build" "debug" "run" "clean" "generate tags" "cppcheck"
+    "find strings in the binary" "list symbols from object files")
   selected=$(printf '%s\n' "${commands[@]}" | fzf --header="project:")
 
   case $selected in
-    "build(debug)")
-      echo ">>> Creating 'build/output/linux/debug' directory"
-      mkdir -p "build/output/linux/debug"
+    "build")
+      echo ">>> Creating '$build_dir/$mode' directory"
+      mkdir -p "$build_dir/$mode"
 
       echo ">>> generating tags"
       ctags --c++-kinds=+p --fields=+iaS --extras=+q --extras=+f -R *
 
-      echo ">>> Building app - (debug) mode"
-      $compiler $general_compiler_flags $debug_only_flags $loader_flags $sdl_include_dir $sdl_include_libs_dir $imgui_dependencies $include_dirs $source_dirs $output_debug
+      echo ">>> Building app - $mode"
+      if [ "$mode" == "debug" ]; then
+        mode_flags="-g -O0"
+      elif [ "$mode" == "release" ]; then
+        mode_flags="-O3"
+      else
+        echo "Unknown mode!"
+      fi
+
+      $compiler $general_compiler_flags $mode_flags $loader_flags $sdl_include_dir $sdl_include_libs_dir $imgui_dependencies $include_dirs $source_dirs $output
       ;;
     "debug")
-      echo ">>> Debugging e4"
-      gdb --tui build/output/linux/debug/e4
+      if [ "$mode" == "debug" ]; then
+        echo ">>> Debugging $app"
+        gdb --tui $build_dir/$mode/$app
+      else
+        echo "you're not in debug mode!"
+      fi
       ;;
-    "run(debug)")
-      echo ">>> Running e4(debug mode)"
-      ./build/output/linux/debug/e4 &
+    "run")
+      echo ">>> Running $app - $mode"
+      ./$build_dir/$mode/$app &
       ;;
-    "clean(debug)")
-      echo ">>> Cleaning 'build/output/linux/debug' directory"
-      rm -r "build/output/linux/debug" ;;
-    "build(release)")
-      echo ">>> Creating 'build/output/linux/release' directory"
-      mkdir -p "build/output/linux/release"
-
-      echo ">>> generating tags"
-      ctags --c++-kinds=+p --fields=+iaS --extras=+q --extras=+f -R *
-
-      echo ">>> Building app - (release) mode"
-      $compiler $general_compiler_flags $release_only_flags $loader_flags $sdl_include_dir $sdl_include_libs_dir $imgui_dependencies $include_dirs $source_dirs $output_release
-      ;;
-    "run(release)")
-      echo ">>> Running e4(release mode)"
-      ./build/output/linux/release/e4
-      ;;
-    "clean(release)")
-      echo ">>> Cleaning 'build/output/linux/release' directory"
-      rm -r "build/output/linux/release" ;;
+    "clean")
+      echo ">>> Cleaning '$build_dir/$mode' directory"
+      rm -r "$build_dir/$mode" ;;
     "generate tags")
       ctags --c++-kinds=+p --fields=+iaS --extras=+q --extras=+f -R *;;
+    "cppcheck")
+      cppcheck --enable=all --platform=unix64 src/main.cpp src/ui/*;;
+    "find strings in the binary")
+      strings $build_dir/$mode/$app | less;;
+    "list symbols from object files")
+      nm $build_dir/$mode/$app | less;;
     *) ;;
   esac
 }
