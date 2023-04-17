@@ -55,7 +55,7 @@ p() {
   imgui_dependencies="dependencies/include/imgui/backends/imgui_impl_sdl.cpp dependencies/include/imgui/backends/imgui_impl_opengl3.cpp dependencies/include/imgui/imgui*.cpp"
   include_dirs="-I src/ -I src/ui -I src/fonts -I dependencies/include/imgui -I dependencies/include/imgui/backends"
 
-  general_compiler_flags="-Wall -std=c++17"
+  general_compiler_flags="-Wall -Wextra -pedantic -std=c++17"
 
   loader_flags="-lGL -ldl"
   sdl_include_dir="`sdl2-config --cflags`"
@@ -63,7 +63,7 @@ p() {
 
   output="-o $build_dir/$mode/$app"
 
-  commands=("build" "debug" "run" "clean" "generate tags" "cppcheck"
+  commands=("build" "debug" "run" "clean" "generate tags" "cppcheck" "valgrind"
     "find strings in the binary" "list symbols from object files")
   selected=$(printf '%s\n' "${commands[@]}" | fzf --header="project:")
 
@@ -105,6 +105,9 @@ p() {
       ctags --c++-kinds=+p --fields=+iaS --extras=+q --extras=+f -R *;;
     "cppcheck")
       cppcheck --enable=all --platform=unix64 src/main.cpp src/ui/*;;
+    "valgrind")
+      valgrind --leak-check=yes --show-leak-kinds=all -s -v $build_dir/$mode/$app;;
+      #valgrind --leak-check=full src/*.cpp ;;
     "find strings in the binary")
       strings $build_dir/$mode/$app | less;;
     "list symbols from object files")

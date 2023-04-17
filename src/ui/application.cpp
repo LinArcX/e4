@@ -24,11 +24,9 @@
 
 bool Application::about_app = false;
 
-Application::Application()
-{}
+Application::Application() : glsl_version(NULL), window(NULL), gl_context(NULL), viewPortX(0), viewPortY(0) {}
 
-Application::~Application()
-{}
+Application::~Application() {}
 
 int Application::Initialize()
 {
@@ -179,8 +177,8 @@ void Application::OpenFileDialog()
   {
     if (ImGuiFileDialog::Instance()->IsOk())
     {
-      std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
-      std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
+      //std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+      //std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
     }
     ImGuiFileDialog::Instance()->Close();
   }
@@ -204,11 +202,10 @@ void Application::ShowRandomText()
 {
   ImGui::Text("INPUT FILE(.ISO, etc..)");
   OpenFileDialog();
-  static int selected_node = 0;  // Index of the currently selected node
 
   // Using those as a base value to create width/height that are factor of the size of our font
   const float TEXT_BASE_WIDTH = ImGui::CalcTextSize("A").x;
-  const float TEXT_BASE_HEIGHT = ImGui::GetTextLineHeightWithSpacing();
+  //const float TEXT_BASE_HEIGHT = ImGui::GetTextLineHeightWithSpacing();
 
   if (ImGui::TreeNode("Tree view"))
   {
@@ -217,6 +214,7 @@ void Application::ShowRandomText()
     ImGui::SetItemDefaultFocus();
     if (ImGui::BeginTable("3ways", 3, flags))
     {
+        static int selected_node = 0;  // Index of the currently selected node
         // The first column will use the default _WidthStretch when ScrollX is Off and _WidthFixed when ScrollX is On
         ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_NoHide);
         ImGui::TableSetupColumn("Size", ImGuiTableColumnFlags_WidthFixed, TEXT_BASE_WIDTH * 12.0f);
